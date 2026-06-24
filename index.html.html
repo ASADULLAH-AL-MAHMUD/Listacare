@@ -1,0 +1,1093 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ListaCare — Exchange Listing & Blockchain Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#020408;
+  --bg2:#060d14;
+  --bg3:#0a1520;
+  --cyan:#00f5ff;
+  --cyan2:#00bcd4;
+  --cyan-dim:rgba(0,245,255,0.12);
+  --cyan-glow:rgba(0,245,255,0.25);
+  --purple:#7b2fff;
+  --purple2:#a855f7;
+  --green:#00ff9d;
+  --text:#e2f4ff;
+  --text2:#7ab8cc;
+  --text3:#3d6475;
+  --border:rgba(0,245,255,0.12);
+  --border2:rgba(0,245,255,0.25);
+}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;cursor:default}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--cyan2)}
+
+/* CANVAS BG */
+#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.55}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(2,4,8,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:0.12em;color:var(--cyan);text-decoration:none;display:flex;align-items:center;gap:0.6rem;text-transform:uppercase}
+.logo-hex{width:22px;height:22px;position:relative;display:flex;align-items:center;justify-content:center}
+.logo-hex svg{animation:hexspin 8s linear infinite}
+@keyframes hexspin{to{transform:rotate(360deg)}}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.12em;color:var(--text2);text-decoration:none;text-transform:uppercase;transition:color 0.2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--cyan);transition:width 0.3s}
+.nav-links a:hover{color:var(--cyan)}
+.nav-links a:hover::after{width:100%}
+.nav-btn{font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--bg);background:var(--cyan);padding:0.55rem 1.5rem;text-decoration:none;transition:all 0.25s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)}
+.nav-btn:hover{background:var(--cyan2);transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--text2);transition:all 0.3s}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);background:var(--cyan)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);background:var(--cyan)}
+.mob-menu{display:none;position:fixed;inset:0;background:rgba(2,4,8,0.97);z-index:90;flex-direction:column;align-items:center;justify-content:center;gap:3rem;backdrop-filter:blur(20px)}
+.mob-menu.open{display:flex}
+.mob-menu a{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--text2);text-decoration:none;transition:color 0.2s}
+.mob-menu a:hover{color:var(--cyan)}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:6rem 3rem 3rem;position:relative;z-index:1}
+.hero-inner{max-width:1200px;width:100%;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-left{animation:slideUp 0.9s ease both}
+.hero-eyebrow{display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem}
+.eyebrow-line{width:40px;height:1.75px;background:linear-gradient(90deg,transparent,var(--cyan))}
+.eyebrow-text{font-family:'Share Tech Mono',monospace;font-size:0.75rem;letter-spacing:0.2em;color:var(--cyan);text-transform:uppercase}
+.hero-h1{font-family:'Rajdhani',sans-serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:700;line-height:0.95;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:1rem}
+.hero-h1 .line1{display:block;color:var(--text)}
+.hero-h1 .line2{display:block;background:linear-gradient(90deg,var(--cyan),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-family:'Share Tech Mono',monospace;font-size:0.8rem;letter-spacing:0.1em;color:var(--cyan);margin-bottom:1.5rem;padding-left:1rem;border-left:2px solid var(--cyan)}
+.hero-desc{font-size:0.95rem;line-height:1.85;color:var(--text2);max-width:480px;margin-bottom:2.5rem}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-glow{font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;background:transparent;color:var(--cyan);border:1px solid var(--cyan);padding:0.9rem 2rem;text-decoration:none;transition:all 0.3s;position:relative;overflow:hidden;display:inline-block}
+.btn-glow::before{content:'';position:absolute;inset:0;background:var(--cyan-dim);transform:translateX(-100%);transition:transform 0.3s}
+.btn-glow:hover::before{transform:translateX(0)}
+.btn-glow:hover{box-shadow:0 0 20px var(--cyan-glow);color:var(--bg)}
+.btn-solid{font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;background:linear-gradient(135deg,var(--cyan),var(--cyan2));color:var(--bg);border:none;padding:0.9rem 2rem;text-decoration:none;transition:all 0.3s;font-weight:600;display:inline-block;cursor:pointer}
+.btn-solid:hover{box-shadow:0 0 25px var(--cyan-glow);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:2rem;margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border);flex-wrap:wrap}
+.stat{text-align:center}
+.stat-n{font-family:'Rajdhani',sans-serif;font-size:2.2rem;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.stat-l{font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;margin-top:0.25rem}
+
+/* HERO RIGHT — BLOCKCHAIN VISUAL */
+.hero-right{display:flex;align-items:center;justify-content:center;animation:fadeIn 1s ease both 0.4s}
+.chain-visual{position:relative;width:420px;height:440px}
+.chain-svg{width:100%;height:100%}
+
+/* TICKER */
+.ticker-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0;overflow:hidden;position:relative;z-index:1}
+.ticker-inner{display:flex;align-items:stretch}
+.ticker-badge{background:linear-gradient(135deg,var(--cyan),var(--cyan2));color:var(--bg);font-family:'Share Tech Mono',monospace;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.9rem 1.5rem;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:0.5rem;font-weight:600}
+.ticker-badge::after{content:'';width:6px;height:6px;background:var(--bg);border-radius:50%;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.ticker-scroll{overflow:hidden;flex:1;display:flex;align-items:center}
+.ticker-track{display:flex;animation:ticker 25s linear infinite;width:max-content;padding:0.85rem 0}
+.t-item{display:flex;align-items:center;gap:0.5rem;padding:0 2rem;white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.9rem;letter-spacing:0.08em;color:var(--text2);border-right:1px solid var(--border)}
+.t-item img{
+    width:48px;
+    height:48px;
+    object-fit:contain;
+    filter:brightness(1.1);
+    transition:0.3s;
+}
+
+.t-item img:hover{
+    transform:scale(1.15);
+}
+.t-dot{width:5px;height:5px;background:var(--cyan);border-radius:50%;box-shadow:0 0 6px var(--cyan);flex-shrink:0}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* SECTIONS */
+section{padding:6rem 3rem;position:relative;z-index:1}
+.sec-inner{max-width:1200px;margin:0 auto}
+.sec-tag{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.sec-tag-line{width:30px;height:1px;background:var(--cyan)}
+.sec-tag-txt{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;color:var(--cyan);text-transform:uppercase}
+.sec-title{font-family:'Rajdhani',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text);line-height:1.1;margin-bottom:3rem}
+.sec-title span{background:linear-gradient(90deg,var(--cyan),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* SERVICES */
+#services{background:var(--bg)}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.svc-card{background:var(--bg);padding:2rem 1.75rem;position:relative;overflow:hidden;transition:background 0.3s;cursor:default}
+.svc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);transform:translateX(-100%);transition:transform 0.5s}
+.svc-card:hover::before{transform:translateX(100%)}
+.svc-card:hover{background:var(--bg3)}
+.svc-card::after{content:'';position:absolute;bottom:0;right:0;width:80px;height:80px;background:radial-gradient(circle,rgba(0,245,255,0.04),transparent);pointer-events:none}
+.svc-num{font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;color:var(--text3);margin-bottom:1.25rem}
+.svc-icon{width:48px;height:48px;border:1px solid var(--border2);background:var(--cyan-dim);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;transition:all 0.3s;clip-path:polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0% 100%,0% 12px)}
+.svc-card:hover .svc-icon{background:rgba(0,245,255,0.18);box-shadow:0 0 15px rgba(0,245,255,0.15)}
+.svc-icon svg{width:22px;height:22px;color:var(--cyan)}
+.svc-title{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:600;color:var(--text);margin-bottom:0.65rem;text-transform:uppercase;letter-spacing:0.06em}
+.svc-desc{font-size:0.83rem;line-height:1.75;color:var(--text2)}
+.svc-chip{display:inline-block;margin-top:1.1rem;font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--cyan);border:1px solid var(--border2);padding:0.28rem 0.7rem;background:var(--cyan-dim)}
+
+/* ABOUT */
+#about{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.about-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:5rem;align-items:start}
+.exchange-list{border:1px solid var(--border);overflow:hidden}
+.exch-header{background:var(--cyan-dim);border-bottom:1px solid var(--border);padding:0.65rem 1rem;font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;color:var(--cyan);text-transform:uppercase;display:flex;align-items:center;gap:0.5rem}
+.exch-header::before{content:'';width:6px;height:6px;background:var(--cyan);border-radius:50%;box-shadow:0 0 6px var(--cyan)}
+.exch-row{display:flex;align-items:center;justify-content:space-between;padding:0.72rem 1rem;border-bottom:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:0.06em;color:var(--text2);transition:all 0.2s}
+.exch-row:last-child{border-bottom:none}
+.exch-row:hover{background:var(--bg3);color:var(--text);padding-left:1.3rem}
+.exch-badge{font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;border:1px solid;padding:0.15rem 0.45rem}
+.exch-badge.primary{color:var(--cyan);border-color:var(--cyan2);background:var(--cyan-dim)}
+.exch-badge.partner{color:var(--purple2);border-color:rgba(168,85,247,0.4);background:rgba(123,47,255,0.08)}
+.exch-badge.coverage{color:var(--green);border-color:rgba(0,255,157,0.4);background:rgba(0,255,157,0.06)}
+.about-text{font-size:0.93rem;line-height:1.88;color:var(--text2);margin-bottom:1.25rem}
+.about-text strong{color:var(--cyan);font-weight:500}
+.skill-chips{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:2rem}
+.skill-chip{font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;color:var(--text2);border:1px solid var(--border);padding:0.35rem 0.8rem;transition:all 0.2s;cursor:default;background:var(--bg)}
+.skill-chip:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+
+
+/* CLIENTS */
+#clients{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+#clients .sec-inner{overflow:visible}
+
+/* CLIENTS COUNT STAT */
+.clients-count-row{display:flex;align-items:center;gap:1.5rem;margin:-1.25rem 0 2.5rem;flex-wrap:wrap}
+.clients-count-num{font-family:'Rajdhani',sans-serif;font-size:clamp(2.6rem,5vw,4rem);font-weight:700;line-height:1;background:linear-gradient(135deg,var(--cyan),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.clients-count-label{font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:0.16em;color:var(--text2);text-transform:uppercase;border-left:2px solid var(--cyan);padding-left:1rem}
+
+.clients-scroll-wrap{position:relative;overflow:hidden;margin-top:0.5rem}
+.clients-scroll-wrap::before,.clients-scroll-wrap::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
+.clients-scroll-wrap::before{left:0;background:linear-gradient(90deg,var(--bg2),transparent)}
+.clients-scroll-wrap::after{right:0;background:linear-gradient(270deg,var(--bg2),transparent)}
+.clients-track{display:flex;width:max-content;animation:clientsScroll 30s linear infinite;padding:1rem 0}
+.clients-track:hover{animation-play-state:paused}
+.client-item{display:flex;flex-direction:column;align-items:center;gap:0.85rem;padding:1.5rem 2.5rem;margin:0 0.75rem;border:1px solid var(--border);background:var(--bg);min-width:150px;position:relative;overflow:hidden;transition:all 0.3s;cursor:pointer;flex-shrink:0}
+.client-item::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);transform:translateX(-100%);transition:transform 0.5s}
+.client-item:hover::before{transform:translateX(100%)}
+.client-item:hover{border-color:var(--cyan);background:var(--bg3);box-shadow:0 0 24px rgba(0,245,255,0.12);transform:translateY(-4px)}
+.client-logo{width:180px;height:180px;border:1px solid var(--border2);background:var(--cyan-dim);display:flex;align-items:center;justify-content:center;clip-path:polygon(14px 0%,100% 0%,100% calc(100% - 14px),calc(100% - 14px) 100%,0% 100%,0% 14px);transition:all 0.3s;overflow:hidden;position:relative}
+.client-item:hover .client-logo{background:rgba(0,245,255,0.2);box-shadow:0 0 22px rgba(0,245,255,0.22)}
+.client-logo::after{content:'\2922  View Project';position:absolute;inset:auto 0 0 0;padding:0.4rem 0;background:rgba(2,4,8,0.85);font-family:'Share Tech Mono',monospace;font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--cyan);text-align:center;transform:translateY(100%);transition:transform 0.3s}
+.client-item:hover .client-logo::after{transform:translateY(0)}
+.client-logo img{width:180px;height:180px;object-fit:contain;filter:none;opacity:0.7;transition:opacity 0.3s}
+.client-item:hover .client-logo img{opacity:1}
+.client-logo-placeholder{width:90px;height:60px;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:1.7rem;font-weight:700;color:var(--cyan);letter-spacing:0.08em}
+.client-name{font-family:'Rajdhani',sans-serif;font-size:0.88rem;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:0.08em;text-align:center;white-space:nowrap}
+.client-tag{font-family:'Share Tech Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--cyan);border:1px solid var(--border2);padding:0.18rem 0.55rem;background:var(--cyan-dim);white-space:nowrap}
+@keyframes clientsScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* CLIENT MODAL */
+.client-modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(2,4,8,0.88);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:2rem;opacity:0;transition:opacity 0.25s}
+.client-modal-overlay.open{display:flex;opacity:1}
+.client-modal{background:var(--bg2);border:1px solid var(--border2);max-width:440px;width:100%;position:relative;box-shadow:0 0 50px rgba(0,245,255,0.1);transform:translateY(16px) scale(0.97);transition:transform 0.3s;clip-path:polygon(18px 0%,100% 0%,100% calc(100% - 18px),calc(100% - 18px) 100%,0% 100%,0% 18px)}
+.client-modal-overlay.open .client-modal{transform:translateY(0) scale(1)}
+.client-modal-close{position:absolute;top:0.9rem;right:0.9rem;width:30px;height:30px;border:1px solid var(--border2);background:var(--cyan-dim);color:var(--cyan);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;line-height:1;z-index:2;transition:all 0.2s}
+.client-modal-close:hover{background:rgba(0,245,255,0.25);box-shadow:0 0 14px rgba(0,245,255,0.2)}
+.client-modal-figure{width:100%;aspect-ratio:1.6/1;background:var(--bg3);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);overflow:hidden}
+.client-modal-figure img{width:100%;height:100%;object-fit:contain;padding:1.5rem}
+.client-modal-figure .client-logo-placeholder{font-size:2.6rem}
+.client-modal-body{padding:1.75rem 1.85rem 2rem}
+.client-modal-tag{display:inline-block;margin-bottom:0.9rem}
+.client-modal-name{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text);margin-bottom:0.4rem}
+.client-modal-desc{font-size:0.85rem;line-height:1.7;color:var(--text2);margin-bottom:1.5rem}
+.client-modal-links{display:flex;flex-direction:column;gap:0.6rem}
+.client-modal-link{display:flex;align-items:center;gap:0.85rem;padding:0.8rem 1rem;border:1px solid var(--border);text-decoration:none;color:var(--text);transition:all 0.2s}
+.client-modal-link:hover{border-color:var(--cyan);background:var(--bg3);transform:translateX(2px)}
+.client-modal-link .c-icon{width:32px;height:32px;flex-shrink:0}
+.client-modal-link .c-icon svg{width:13px;height:13px}
+.client-modal-link-text{display:flex;flex-direction:column}
+.client-modal-link-label{font-family:'Share Tech Mono',monospace;font-size:0.56rem;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase}
+.client-modal-link-value{font-size:0.82rem;color:var(--text)}
+
+
+/* WHY */
+#why{background:var(--bg)}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.why-card{border:1px solid var(--border);padding:1.75rem 1.4rem;position:relative;overflow:hidden;transition:all 0.3s;cursor:default;background:var(--bg)}
+.why-card:hover{border-color:var(--cyan);background:var(--bg3);box-shadow:0 0 30px rgba(0,245,255,0.05)}
+.why-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,var(--cyan-dim),transparent);opacity:0;transition:opacity 0.3s}
+.why-card:hover::before{opacity:1}
+.why-hex{font-family:'Share Tech Mono',monospace;font-size:2.5rem;color:rgba(0,245,255,0.06);line-height:1;margin-bottom:0.5rem;font-weight:700}
+.why-title{font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;position:relative;z-index:1}
+.why-desc{font-size:0.8rem;line-height:1.75;color:var(--text2);position:relative;z-index:1}
+
+/* PROCESS */
+#process{background:var(--bg2);border-top:1px solid var(--border)}
+.process-chain{display:flex;align-items:flex-start;position:relative;gap:0}
+.process-chain::before{content:'';position:absolute;top:28px;left:28px;right:28px;height:1px;background:linear-gradient(90deg,var(--cyan),var(--purple2),var(--cyan));opacity:0.3}
+.proc-step{flex:1;padding:0 1rem;text-align:center;position:relative}
+.proc-num{width:56px;height:56px;border:1px solid var(--border2);background:var(--bg2);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--cyan);position:relative;z-index:1;transition:all 0.3s;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
+.proc-step:hover .proc-num{background:var(--cyan);color:var(--bg);box-shadow:0 0 20px var(--cyan-glow)}
+.proc-title{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.45rem}
+.proc-desc{font-size:0.78rem;line-height:1.72;color:var(--text2)}
+
+
+/* TEAM */
+#team{background:var(--bg);border-top:1px solid var(--border)}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:1rem}
+.team-card{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:2rem 1.5rem;border:1px solid var(--border);background:var(--bg);position:relative;overflow:hidden;transition:all 0.3s;cursor:default;text-align:center}
+.team-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--cyan-dim),transparent);opacity:0;transition:opacity 0.3s}
+.team-card:hover::before{opacity:1}
+.team-card:hover{border-color:var(--cyan);box-shadow:0 0 30px rgba(0,245,255,0.05)}
+.team-photo-wrap{position:relative;flex-shrink:0}
+.team-photo{width:90px;height:90px;border-radius:50%;border:2px solid var(--border2);object-fit:cover;display:block;transition:border-color 0.3s;background:var(--bg3)}
+.team-card:hover .team-photo{border-color:var(--cyan);box-shadow:0 0 16px rgba(0,245,255,0.25)}
+.team-photo-placeholder img{width:140px;height:140px;border-radius:50%;border:2px solid var(--border2);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:1.8rem;font-weight:700;color:var(--cyan);transition:all 0.3s}
+.team-card:hover .team-photo-placeholder{border-color:var(--cyan);box-shadow:0 0 px rgba(0,245,255,0.25)}
+.team-ring{position:absolute;inset:-4px;border-radius:50%;border:1px solid transparent;border-top-color:var(--cyan);border-right-color:var(--cyan);opacity:0;transition:opacity 0.3s;animation:none}
+.team-card:hover .team-ring{opacity:1;animation:spin 2.5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.team-name{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:0.08em;position:relative;z-index:1}
+.team-role{font-family:'Share Tech Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;color:var(--cyan);text-transform:uppercase;position:relative;z-index:1}
+.team-socials{display:flex;gap:0.75rem;margin-top:0.25rem;position:relative;z-index:1}
+.team-soc{width:32px;height:32px;border:1px solid var(--border2);background:var(--cyan-dim);display:flex;align-items:center;justify-content:center;color:var(--text2);text-decoration:none;transition:all 0.25s;clip-path:polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px)}
+.team-soc:hover{background:var(--cyan);color:var(--bg);border-color:var(--cyan);box-shadow:0 0 12px var(--cyan-glow)}
+.team-soc svg{width:13px;height:13px}
+
+@media(max-width:900px){
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .team-grid{grid-template-columns:1fr 1fr}
+}
+border-top:1px solid var(--border);padding:1.75rem 3rem;position:relative;z-index:1}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.25rem}
+.footer-logo{font-family:'Rajdhani',sans-serif;font-size:1.3rem;font-weight:700;letter-spacing:0.14em;color:var(--cyan);text-transform:uppercase}
+.footer-copy{font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;color:var(--text3)}
+.footer-socials{display:flex;gap:0.6rem}
+.fsoc{width:32px;height:32px;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--text3);text-decoration:none;transition:all 0.2s;clip-path:polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px)}
+.fsoc:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim);box-shadow:0 0 10px rgba(0,245,255,0.15)}
+
+
+/* CONTACT */
+#contact{background:var(--bg);border-top:1px solid var(--border)}
+.contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:5rem;align-items:start}
+.contact-lead{font-size:0.9rem;line-height:1.85;color:var(--text2);margin-bottom:2.25rem}
+.contact-panel{border:1px solid var(--border);overflow:hidden}
+.contact-panel-header{background:var(--cyan-dim);border-bottom:1px solid var(--border);padding:0.65rem 1.25rem;font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;color:var(--cyan);text-transform:uppercase;display:flex;align-items:center;gap:0.5rem}
+.contact-panel-header::before{content:'';width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:blink 1.5s step-end infinite}
+.c-row{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;border-bottom:1px solid var(--border);text-decoration:none;transition:background 0.2s;cursor:pointer}
+.c-row:last-child{border-bottom:none}
+.c-row:hover{background:var(--bg3)}
+.c-icon{width:36px;height:36px;border:1px solid var(--border2);background:var(--cyan-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--cyan);clip-path:polygon(10px 0%,100% 0%,100% calc(100% - 10px),calc(100% - 10px) 100%,0% 100%,0% 10px)}
+.c-icon svg{width:14px;height:14px}
+.c-label{font-family:'Share Tech Mono',monospace;font-size:0.57rem;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase}
+.c-value{font-size:0.85rem;color:var(--text);margin-top:0.08rem}
+.contact-form{display:flex;flex-direction:column;gap:1rem}
+.f-group{display:flex;flex-direction:column;gap:0.4rem}
+.f-label{font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase}
+.f-input,.f-ta{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:0.75rem 1rem;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:300;outline:none;transition:border-color 0.25s;width:100%;resize:vertical}
+.f-input:focus,.f-ta:focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,245,255,0.08)}
+.f-ta{min-height:110px}
+.f-input::placeholder,.f-ta::placeholder{color:var(--text3)}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 3rem;position:relative;z-index:1}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.25rem}
+.footer-logo{font-family:'Rajdhani',sans-serif;font-size:1.3rem;font-weight:700;letter-spacing:0.14em;color:var(--cyan);text-transform:uppercase}
+.footer-copy{font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;color:var(--text3)}
+.footer-socials{display:flex;gap:0.6rem}
+.fsoc{width:32px;height:32px;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--text3);text-decoration:none;transition:all 0.2s;clip-path:polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px)}
+.fsoc:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim);box-shadow:0 0 10px rgba(0,245,255,0.15)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:none}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.why-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){
+  nav{padding:0.9rem 1.25rem}
+  .nav-links,.nav-btn{display:none}
+  .hamburger{display:flex}
+  #hero{padding:5.5rem 1.25rem 3rem}
+  .hero-inner{grid-template-columns:1fr;text-align:center;gap:2.5rem}
+  .hero-eyebrow{justify-content:center}
+  .hero-sub{text-align:left}
+  .hero-desc{max-width:100%}
+  .hero-btns{justify-content:center}
+  .hero-stats{justify-content:center}
+  .hero-right{order:-1}
+  .chain-visual{width:260px;height:260px}
+  section{padding:4rem 1.25rem}
+  .svc-grid{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr;gap:2.5rem}
+  .why-grid{grid-template-columns:1fr 1fr;gap:1rem}
+  .process-chain{flex-direction:column;gap:2rem}
+  .process-chain::before{display:none}
+  .proc-step{padding:0}
+  .contact-grid{grid-template-columns:1fr;gap:2.5rem}
+  footer .footer-inner{flex-direction:column;align-items:flex-start;padding:0}
+  footer{padding:1.5rem 1.25rem}
+  .ticker-badge span{display:none}
+}
+@media(max-width:480px){.why-grid{grid-template-columns:1fr}.hero-h1{font-size:2.6rem}}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <a href="#services" onclick="closeM()">Services</a>
+  <a href="#about" onclick="closeM()">About</a>
+  <a href="#clients" onclick="closeM()">Clients</a>
+  <a href="#process" onclick="closeM()">Process</a>
+  <a href="#contact" onclick="closeM()">Contact</a>
+  <a href="#contact" class="btn-solid" onclick="closeM()" style="font-size:0.72rem;padding:0.9rem 2.5rem;margin-top:0.5rem">Get Listed</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="logo-hex">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <polygon points="11,1 20,6 20,16 11,21 2,16 2,6" stroke="#00f5ff" stroke-width="1" fill="rgba(0,245,255,0.08)"/>
+        <polygon points="11,5 17,8.5 17,15.5 11,19 5,15.5 5,8.5" stroke="#00f5ff" stroke-width="0.5" fill="none" opacity="0.4"/>
+      </svg>
+    </span>
+    ListaCare
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#clients">Clients</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-btn">Get Listed</a>
+  <button class="hamburger" id="hbg" onclick="toggleM()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-line"></span>
+        <span class="eyebrow-text">Global Crypto Listing Agency</span>
+      </div>
+      <h1 class="hero-h1">
+        <span class="line1">Lista</span>
+        <span class="line2">Care</span>
+      </h1>
+      
+      <p class="hero-desc">Accelerating crypto projects through strategic exchange listings, market-making, liquidity management, and growth services. Delivering end-to-end execution from launch preparation to global exchange listings.</p>
+      <div class="hero-btns">
+        <a href="#services" class="btn-solid">Explore Services</a>
+        <a href="#contact" class="btn-glow">Get Listed Now</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-n">40+</div><div class="stat-l">Exchanges</div></div>
+        <div class="stat"><div class="stat-n">CEX+DEX</div><div class="stat-l">Full Coverage</div></div>
+        <div class="stat"><div class="stat-n">IEO</div><div class="stat-l">Launchpad</div></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <!-- Blockchain-themed SVG visual -->
+      <div class="chain-visual">
+        <svg class="chain-svg" viewBox="0 0 420 440" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="cg1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f5ff" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#7b2fff" stop-opacity="0.8"/>
+            </linearGradient>
+            <linearGradient id="cg2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f5ff" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#7b2fff" stop-opacity="0.3"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="glow2">
+              <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- Hex grid background -->
+          <g opacity="0.06" stroke="#00f5ff" stroke-width="0.5">
+            <polygon points="60,20 90,37 90,71 60,88 30,71 30,37"/>
+            <polygon points="120,20 150,37 150,71 120,88 90,71 90,37"/>
+            <polygon points="180,20 210,37 210,71 180,88 150,71 150,37"/>
+            <polygon points="240,20 270,37 270,71 240,88 210,71 210,37"/>
+            <polygon points="300,20 330,37 330,71 300,88 270,71 270,37"/>
+            <polygon points="360,20 390,37 390,71 360,88 330,71 330,37"/>
+            <polygon points="30,88 60,105 60,139 30,156 0,139 0,105"/>
+            <polygon points="90,88 120,105 120,139 90,156 60,139 60,105"/>
+            <polygon points="150,88 180,105 180,139 150,156 120,139 120,105"/>
+            <polygon points="210,88 240,105 240,139 210,156 180,139 180,105"/>
+            <polygon points="270,88 300,105 300,139 270,156 240,139 240,105"/>
+            <polygon points="330,88 360,105 360,139 330,156 300,139 300,105"/>
+            <polygon points="390,88 420,105 420,139 390,156 360,139 360,105"/>
+            <polygon points="60,156 90,173 90,207 60,224 30,207 30,173"/>
+            <polygon points="120,156 150,173 150,207 120,224 90,207 90,173"/>
+            <polygon points="180,156 210,173 210,207 180,224 150,207 150,173"/>
+            <polygon points="240,156 270,173 270,207 240,224 210,207 210,173"/>
+            <polygon points="300,156 330,173 330,207 300,224 270,207 270,173"/>
+            <polygon points="360,156 390,173 390,207 360,224 330,207 330,173"/>
+            <polygon points="30,224 60,241 60,275 30,292 0,275 0,241"/>
+            <polygon points="90,224 120,241 120,275 90,292 60,275 60,241"/>
+            <polygon points="150,224 180,241 180,275 150,292 120,275 120,241"/>
+            <polygon points="210,224 240,241 240,275 210,292 180,275 180,241"/>
+            <polygon points="270,224 300,241 300,275 270,292 240,275 240,241"/>
+            <polygon points="330,224 360,241 360,275 330,292 300,275 300,241"/>
+            <polygon points="390,224 420,241 420,275 390,292 360,275 360,241"/>
+            <polygon points="60,292 90,309 90,343 60,360 30,343 30,309"/>
+            <polygon points="120,292 150,309 150,343 120,360 90,343 90,309"/>
+            <polygon points="180,292 210,309 210,343 180,360 150,343 150,309"/>
+            <polygon points="240,292 270,309 270,343 240,360 210,343 210,309"/>
+            <polygon points="300,292 330,309 330,343 300,360 270,343 270,309"/>
+            <polygon points="360,292 390,309 390,343 360,360 330,343 330,309"/>
+          </g>
+
+          <!-- Connection lines -->
+          <g stroke="url(#cg2)" stroke-width="1" opacity="0.7">
+            <line x1="210" y1="120" x2="90" y2="200"/>
+            <line x1="210" y1="120" x2="330" y2="200"/>
+            <line x1="90" y1="200" x2="150" y2="310"/>
+            <line x1="330" y1="200" x2="270" y2="310"/>
+            <line x1="150" y1="310" x2="210" y2="370"/>
+            <line x1="270" y1="310" x2="210" y2="370"/>
+            <line x1="90" y1="200" x2="270" y2="310"/>
+            <line x1="330" y1="200" x2="150" y2="310"/>
+          </g>
+
+          <!-- Animated pulse lines -->
+          <line x1="210" y1="120" x2="90" y2="200" stroke="#00f5ff" stroke-width="1.5" opacity="0.5" filter="url(#glow)">
+            <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2s" repeatCount="indefinite"/>
+          </line>
+          <line x1="210" y1="120" x2="330" y2="200" stroke="#7b2fff" stroke-width="1.5" opacity="0.5" filter="url(#glow)">
+            <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2s" repeatCount="indefinite"/>
+          </line>
+          <line x1="150" y1="310" x2="210" y2="370" stroke="#00f5ff" stroke-width="1.5" opacity="0.5" filter="url(#glow)">
+            <animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.8s" repeatCount="indefinite"/>
+          </line>
+
+          <!-- Block nodes -->
+          <!-- Center top -->
+          <g filter="url(#glow2)">
+            <rect x="175" y="85" width="70" height="70" rx="4" fill="#0a1520" stroke="url(#cg1)" stroke-width="1.5"/>
+            <text x="210" y="114" text-anchor="middle" font-family="Share Tech Mono" font-size="18" fill="#00f5ff" letter-spacing="1">Lista</text>
+            <text x="210" y="136" text-anchor="middle" font-family="Share Tech Mono" font-size="16" fill="#7b2fff" letter-spacing="1">Care</text>
+            
+            <rect x="175" y="85" width="70" height="3" fill="url(#cg1)" rx="2"/>
+          </g>
+
+          <!-- Left node -->
+          <g filter="url(#glow)">
+            <rect x="45" y="165" width="90" height="70" rx="4" fill="#0a1520" stroke="#00f5ff" stroke-width="1">
+              <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/>
+            </rect>
+            <text x="90" y="195" text-anchor="middle" font-family="Share Tech Mono" font-size="18" fill="#00f5ff" letter-spacing="1">CEX+DEX</text>
+            <text x="90" y="215" text-anchor="middle" font-family="Share Tech Mono" font-size="12" fill="#7ab8cc">40+Exchanges</text>
+           
+            <rect x="45" y="165" width="90" height="3" fill="#00f5ff" rx="2"/>
+          </g>
+
+          <!-- Right node -->
+          <g filter="url(#glow)">
+            <rect x="285" y="165" width="90" height="70" rx="4" fill="#0a1520" stroke="#a855f7" stroke-width="1">
+              <animate attributeName="stroke-opacity" values="1;0.4;1" dur="3s" repeatCount="indefinite"/>
+            </rect>
+            <text x="330" y="195" text-anchor="middle" font-family="Share Tech Mono" font-size="18" fill="#a855f7" letter-spacing="1">CEX+DEX</text>
+            <text x="330" y="215" text-anchor="middle" font-family="Share Tech Mono" font-size="12" fill="#7ab8cc">40+ Partners</text>
+            
+            <rect x="285" y="165" width="90" height="3" fill="#a855f7" rx="2"/>
+          </g>
+
+          <!-- Bottom left node -->
+          <g filter="url(#glow)">
+            <rect x="90" y="275" width="90" height="70" rx="4" fill="#0a1520" stroke="#00f5ff" stroke-width="0.8">
+              <animate attributeName="stroke-opacity" values="0.3;0.8;0.3" dur="2.5s" repeatCount="indefinite"/>
+            </rect>
+            <text x="135" y="302" text-anchor="middle" font-family="Share Tech Mono" font-size="18" fill="#00ff9d" letter-spacing="1">MARKET</text>
+            <text x="135" y="317" text-anchor="middle" font-family="Share Tech Mono" font-size="16" fill="#00ff9d">MAKING</text>
+            <text x="135" y="333" text-anchor="middle" font-family="Share Tech Mono" font-size="12" fill="#3d6475">#LQDT</text>
+            <rect x="90" y="275" width="90" height="3" fill="#00ff9d" rx="2"/>
+          </g>
+
+          <!-- Bottom right node -->
+          <g filter="url(#glow)">
+            <rect x="240" y="275" width="90" height="70" rx="4" fill="#0a1520" stroke="#7b2fff" stroke-width="0.8">
+              <animate attributeName="stroke-opacity" values="0.8;0.3;0.8" dur="2.5s" repeatCount="indefinite"/>
+            </rect>
+            <text x="285" y="302" text-anchor="middle" font-family="Share Tech Mono" font-size="18" fill="#7b2fff" letter-spacing="1">SMART</text>
+            <text x="285" y="317" text-anchor="middle" font-family="Share Tech Mono" font-size="16" fill="#7b2fff">CONTRACT</text>
+            <text x="285" y="333" text-anchor="middle" font-family="Share Tech Mono" font-size="12" fill="#3d6475">#CODE</text>
+            <rect x="240" y="275" width="90" height="3" fill="#7b2fff" rx="2"/>
+          </g>
+
+          <!-- Bottom center node -->
+          <g filter="url(#glow)">
+            <rect x="168" y="350" width="84" height="60" rx="4" fill="#0a1520" stroke="url(#cg1)" stroke-width="1.5"/>
+            <text x="210" y="376" text-anchor="middle" font-family="Share Tech Mono" font-size="18" fill="#00f5ff" letter-spacing="1">IEO/IDO</text>
+            <text x="210" y="393" text-anchor="middle" font-family="Share Tech Mono" font-size="16" fill="#7ab8cc">Launchpad</text>
+            <rect x="168" y="350" width="84" height="3" fill="url(#cg1)" rx="2"/>
+          </g>
+
+          <!-- Floating dots / particles -->
+          <circle cx="40" cy="80" r="2" fill="#00f5ff" opacity="0.5"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="2.1s" repeatCount="indefinite"/></circle>
+          <circle cx="380" cy="110" r="2" fill="#7b2fff" opacity="0.5"><animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.8s" repeatCount="indefinite"/></circle>
+          <circle cx="20" cy="300" r="1.5" fill="#00ff9d" opacity="0.4"><animate attributeName="opacity" values="0.1;0.7;0.1" dur="3s" repeatCount="indefinite"/></circle>
+          <circle cx="400" cy="350" r="2" fill="#00f5ff" opacity="0.4"><animate attributeName="opacity" values="0.5;0.1;0.5" dur="2.4s" repeatCount="indefinite"/></circle>
+          <circle cx="210" cy="50" r="1.5" fill="#a855f7" opacity="0.5"><animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.6s" repeatCount="indefinite"/></circle>
+
+          <!-- Moving data packet on lines -->
+          <circle r="3" fill="#00f5ff" filter="url(#glow2)">
+            <animateMotion dur="3s" repeatCount="indefinite">
+              <mpath href="#path1"/>
+            </animateMotion>
+          </circle>
+          <path id="path1" d="M210,120 L90,200 L150,310 L210,370"/>
+
+          <circle r="3" fill="#7b2fff" filter="url(#glow2)">
+            <animateMotion dur="3.5s" repeatCount="indefinite">
+              <mpath href="#path2"/>
+            </animateMotion>
+          </circle>
+          <path id="path2" d="M210,120 L330,200 L270,310 L210,370"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-section">
+  <div class="ticker-inner">
+    <div class="ticker-badge">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polygon points="6,0 11,3 11,9 6,12 1,9 1,3" fill="rgba(2,4,8,0.8)" stroke="rgba(2,4,8,0.5)" stroke-width="0.5"/></svg>
+      <span>Live Partners</span>
+    </div>
+    <div class="ticker-scroll">
+      <div class="ticker-track">
+        <!-- Original set -->
+        <div class="t-item"><img src="kucoin.png" alt="kucoin"></div>
+        <div class="t-item"><img src="bitmartlogo.png" alt="BitMart"></div>
+        <div class="t-item"><img src="gateio.png" alt="Gate.io"></div>
+        <div class="t-item"><img src="mexclogo.png" alt="MEXC"></div>
+        <div class="t-item"><img src="logo.png" alt="BingX"></div>
+        <div class="t-item"><img src="bitget-logo.png" alt="BitGet"></div>
+        <div class="t-item"><img src="XT.jpg" alt="XT"></div>
+        <div class="t-item"><img src="lbank.png" alt="LBank"></div>
+        <div class="t-item"><img src="weex1.png" alt="WEEX"></div>
+        <div class="t-item"><img src="biconomy.png" alt="Biconomy"></div>
+        <div class="t-item"><span class="t-dot"></span>Tier-3 CEX</div>
+        <div class="t-item"><span class="t-dot"></span>DEX Platforms</div>
+        <!-- Duplicate set for seamless loop -->
+        <div class="t-item"><img src="kucoin.png" alt="kucoin"></div>
+        <div class="t-item"><img src="bitmartlogo.png" alt="BitMart"></div>
+        <div class="t-item"><img src="gateio.png" alt="Gate.io"></div>
+        <div class="t-item"><img src="mexclogo.png" alt="MEXC"></div>
+        <div class="t-item"><img src="logo.png" alt="BingX"></div>
+        <div class="t-item"><img src="bitget-logo.png" alt="BitGet"></div>
+        <div class="t-item"><img src="XT.jpg" alt="XT"></div>
+        <div class="t-item"><img src="lbank.png" alt="LBank"></div>
+        <div class="t-item"><img src="weex1.png" alt="WEEX"></div>
+        <div class="t-item"><img src="biconomy.png" alt="Biconomy"></div>
+        <div class="t-item"><span class="t-dot"></span>Tier-3 CEX</div>
+        <div class="t-item"><span class="t-dot"></span>DEX Platforms</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="sec-inner">
+    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Services</span></div>
+    <h2 class="sec-title reveal">Everything Your <span>Listing Needs</span></h2>
+    <div class="svc-grid reveal">
+      <div class="svc-card">
+        <div class="svc-num">SVC_001</div>
+        <div class="svc-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3"/></svg></div>
+        <h3 class="svc-title">CEX &amp; DEX Listing</h3>
+        <p class="svc-desc">Comprehensive token listing on top-tier centralized and decentralized exchanges. From application to listing day, we manage every step with precision.</p>
+        <span class="svc-chip">Full Coverage</span>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">SVC_002</div>
+        <div class="svc-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614"/></svg></div>
+        <h3 class="svc-title">Exchange Partnerships</h3>
+        <p class="svc-desc">Strategic business development with exchange partners. Build relationships that give your project preferential listing terms and ongoing support.</p>
+        <span class="svc-chip">Business Dev</span>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">SVC_003</div>
+        <div class="svc-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84"/></svg></div>
+        <h3 class="svc-title">IEO &amp; Launchpad</h3>
+        <p class="svc-desc">End-to-end IEO management and launchpad placement. Connect your project with the right exchange launchpad for maximum initial raise.</p>
+        <span class="svc-chip">Launch Ready</span>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">SVC_004</div>
+        <div class="svc-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg></div>
+        <h3 class="svc-title">Market Making &amp; Liquidity</h3>
+        <p class="svc-desc">Institutional-grade market making and liquidity provisioning — healthy order books, competitive spreads, and price stability post-listing.</p>
+        <span class="svc-chip">Liquidity</span>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">SVC_005</div>
+        <div class="svc-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0H3"/></svg></div>
+        <h3 class="svc-title">Smart Contract Dev</h3>
+        <p class="svc-desc">Professional blockchain smart contract development by our dedicated team. EVM-compatible, audited, and deployment-ready across major chains.</p>
+        <span class="svc-chip">Blockchain</span>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">SVC_006</div>
+        <div class="svc-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"/></svg></div>
+        <h3 class="svc-title">Social Media Promotion</h3>
+        <p class="svc-desc">Strategic crypto marketing across YouTube, Twitter/X, and Telegram. Build awareness, community, and credibility before and after listing.</p>
+        <span class="svc-chip">Marketing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec-inner">
+    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">About</span></div>
+    <div class="about-grid">
+      <div class="reveal">
+        <h2 class="sec-title" style="margin-bottom:1.75rem">Exchange <span>Network</span></h2>
+        <div class="exchange-list">
+          <div class="exch-header"> Connected Exchanges</div>
+          <div class="exch-row">BitMart Exchange <span class="exch-badge primary">Primary</span></div>
+          <div class="exch-row">Gate.io <span class="exch-badge partner">Partner</span></div>
+          <div class="exch-row">MEXC <span class="exch-badge partner">Partner</span></div>
+          <div class="exch-row">BingX <span class="exch-badge partner">Partner</span></div>
+          <div class="exch-row">BitGet <span class="exch-badge partner">Partner</span></div>
+          <div class="exch-row">XT.com <span class="exch-badge partner">Partner</span></div>
+          <div class="exch-row">LBank <span class="exch-badge partner">Partner</span></div>
+          <div class="exch-row">WEEX <span class="exch-badge partner">Partner</span></div>
+          <div class="exch-row">Biconomy <span class="exch-badge partner">Partner</span></div>
+          <div class="exch-row">All Tier-3 Exchanges <span class="exch-badge coverage">Coverage</span></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <h2 class="sec-title" style="margin-bottom:1.5rem">Bridging Projects to <span>Global Markets</span></h2>
+        <p class="about-text"><strong>ListaCare is a global crypto listing and growth agency</strong> helping blockchain and crypto projects navigate the path from launch to large-scale market exposure. We specialize in exchange listings, market-making, liquidity management, strategic partnerships, and growth solutions designed to accelerate project success.</p>
+        <p class="about-text">Our team works closely with founders, startups, and established ecosystems to secure listings across leading centralized and decentralized exchanges while building the infrastructure needed for long-term growth.<strong> We provide end-to-end solutions under one roof.</strong></p>
+        <p class="about-text">Whether launching a new token, expanding into new markets, or preparing for top-tier exchange exposure, our focus remains the same: We help projects move faster,<strong> reduce operational complexity, and maximize listing opportunities.</strong></p>
+        <div class="skill-chips">
+          <span class="skill-chip">Token Listing</span><span class="skill-chip">IEO Management</span><span class="skill-chip">Market Making</span><span class="skill-chip">Liquidity</span><span class="skill-chip">Smart Contracts</span><span class="skill-chip">DeFi</span><span class="skill-chip">CEX Strategy</span><span class="skill-chip">DEX Listing</span><span class="skill-chip">Business Dev</span><span class="skill-chip">Crypto Marketing</span><span class="skill-chip">YouTube Promo</span><span class="skill-chip">Launchpad</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section id="clients">
+  <div class="sec-inner">
+    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Clients</span></div>
+    <h2 class="sec-title reveal">Projects We've <span>Launched</span></h2>
+
+    <div class="clients-count-row reveal">
+      <span class="clients-count-num" id="clientsCounter" data-target="100">0+</span>
+      <span class="clients-count-label">Projects Successfully<br>Listed &amp; Launched</span>
+    </div>
+
+    <div class="clients-scroll-wrap">
+      <div class="clients-track" id="clientsTrack">
+        <!-- Original set -->
+        <div class="client-item" data-name="BitMart Project" data-tag="CEX Listed" data-img="photo_2026-06-18_23-51-05.jpg" data-desc="Full-cycle exchange listing on BitMart, covering compliance docs, market-making coordination and post-listing liquidity support." data-website="https://bitmart.com" data-tg="https://t.me/asad_2070">
+          <div class="client-logo"><img src="photo_2026-06-18_23-51-05.jpg" alt="BitMart Project"></div>
+          <div class="client-name">BitMart Project</div>
+          <span class="client-tag">CEX Listed</span>
+        </div>
+        <div class="client-item" data-name="GateToken" data-tag="IEO" data-img="snc.png" data-desc="Managed the Initial Exchange Offering for GateToken, from application package to launch-day marketing push." data-website="https://gate.io" data-tg="https://t.me/asad_2070">
+          <div class="client-logo"><img src="snc.png" alt="GateToken"></div>
+          <div class="client-name">GateToken</div>
+          <span class="client-tag">IEO</span>
+        </div>
+        <div class="client-item" data-name="MEXC Launch" data-tag="Tier-2 CEX" data-placeholder="MX" data-desc="Coordinated a Tier-2 CEX launch on MEXC, including listing strategy, fee negotiation and exchange onboarding." data-website="https://mexc.com" data-tg="https://t.me/asad_2070">
+          <div class="client-logo"><div class="client-logo-placeholder">MX</div></div>
+          <div class="client-name">MEXC Launch</div>
+          <span class="client-tag">Tier-2 CEX</span>
+        </div>
+        <div class="client-item" data-name="BingX Token" data-tag="Partner" data-placeholder="BX" data-desc="Ongoing listing partnership with BingX, supporting token onboarding and ongoing exchange relationship management." data-website="https://bingx.com" data-tg="https://t.me/asad_2070">
+          <div class="client-logo"><div class="client-logo-placeholder">BX</div></div>
+          <div class="client-name">BingX Token</div>
+          <span class="client-tag">Partner</span>
+        </div>
+        <div class="client-item" data-name="DeFi Protocol" data-tag="DEX Listed" data-placeholder="DF" data-desc="Guided a DeFi protocol through DEX liquidity pool setup, pair listings and on-chain visibility tooling." data-website="#" data-tg="https://t.me/asad_2070">
+          <div class="client-logo"><div class="client-logo-placeholder">DF</div></div>
+          <div class="client-name">DeFi Protocol</div>
+          <span class="client-tag">DEX Listed</span>
+        </div>
+        <div class="client-item" data-name="LBank Asset" data-tag="CEX Listed" data-placeholder="LB" data-desc="Delivered a complete CEX listing on LBank, including documentation review and trading pair activation." data-website="https://lbank.com" data-tg="https://t.me/asad_2070">
+          <div class="client-logo"><div class="client-logo-placeholder">LB</div></div>
+          <div class="client-name">LBank Asset</div>
+          <span class="client-tag">CEX Listed</span>
+        </div>
+        <div class="client-item" data-name="WEEX Chain" data-tag="Launchpad" data-placeholder="WX" data-desc="Ran the launchpad campaign for WEEX Chain, handling token sale logistics and exchange go-live coordination." data-website="https://weex.com" data-tg="https://t.me/asad_2070">
+          <div class="client-logo"><div class="client-logo-placeholder">WX</div></div>
+          <div class="client-name">WEEX Chain</div>
+          <span class="client-tag">Launchpad</span>
+        </div>
+        <div class="client-item" data-name="Biconomy" data-tag="Partner" data-placeholder="BC" data-desc="Strategic partner engagement with Biconomy, supporting cross-chain integration and listing advisory." data-website="https://biconomy.io" data-tg="https://t.me/asad_2070">
+          <div class="client-logo"><div class="client-logo-placeholder">BC</div></div>
+          <div class="client-name">Biconomy</div>
+          <span class="client-tag">Partner</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENT PROJECT MODAL -->
+<div class="client-modal-overlay" id="clientModalOverlay">
+  <div class="client-modal">
+    <button class="client-modal-close" id="clientModalClose" aria-label="Close">&#10005;</button>
+    <div class="client-modal-figure" id="clientModalFigure"></div>
+    <div class="client-modal-body">
+      <span class="client-tag client-modal-tag" id="clientModalTag"></span>
+      <div class="client-modal-name" id="clientModalName"></div>
+      <p class="client-modal-desc" id="clientModalDesc"></p>
+      <div class="client-modal-links">
+        <a href="#" class="client-modal-link" id="clientModalWebsite" target="_blank" rel="noopener">
+          <div class="c-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m-15.432-9.671A8.959 8.959 0 003 12c0 .778.099 1.533.284 2.253m15.432 0a9.004 9.004 0 01-2.591 4.082M3.284 14.253a9.004 9.004 0 002.591 4.082M3.284 14.253A8.997 8.997 0 0012 21M3.284 14.253a17.91 17.91 0 008.716 6.747"/></svg></div>
+          <div class="client-modal-link-text"><span class="client-modal-link-label">Website</span><span class="client-modal-link-value" id="clientModalWebsiteText"></span></div>
+        </a>
+        <a href="#" class="client-modal-link" id="clientModalTg" target="_blank" rel="noopener">
+          <div class="c-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg></div>
+          <div class="client-modal-link-text"><span class="client-modal-link-label">Telegram</span><span class="client-modal-link-value" id="clientModalTgText"></span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="sec-inner">
+    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Process</span></div>
+    <h2 class="sec-title reveal">The Listing <span>Pipeline</span></h2>
+    <div class="process-chain reveal">
+      <div class="proc-step"><div class="proc-num">01</div><h3 class="proc-title">Consultation</h3><p class="proc-desc">Initial discussion to understand your project, tokenomics, and target exchanges.</p></div>
+      <div class="proc-step"><div class="proc-num">02</div><h3 class="proc-title">Strategy</h3><p class="proc-desc">Custom listing roadmap, exchange selection, and timeline planning.</p></div>
+      <div class="proc-step"><div class="proc-num">03</div><h3 class="proc-title">Documentation</h3><p class="proc-desc">Preparation of all listing applications, due diligence, and compliance docs.</p></div>
+      <div class="proc-step"><div class="proc-num">04</div><h3 class="proc-title">Negotiation</h3><p class="proc-desc">Direct talks with exchange teams to secure best listing terms and timeline.</p></div>
+      <div class="proc-step"><div class="proc-num">05</div><h3 class="proc-title">Launch &amp; Support</h3><p class="proc-desc">Listing day coordination, liquidity setup, marketing activation, and ongoing support.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="sec-inner">
+    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Advantages</span></div>
+    <h2 class="sec-title reveal">Why Choose <span>ListaCare</span></h2>
+    <div class="why-grid">
+      <div class="why-card reveal"><div class="why-hex">01</div><h3 class="why-title">Direct Insider Access</h3><p class="why-desc">As an active listing manager at BitMart, we have direct channel access — no intermediaries, no delays, no inflated fees.</p></div>
+      <div class="why-card reveal"><div class="why-hex">02</div><h3 class="why-title">40+ Exchange Network</h3><p class="why-desc">From tier-1 CEX to DEX, our partner network covers the full spectrum of crypto trading venues globally.</p></div>
+      <div class="why-card reveal"><div class="why-hex">03</div><h3 class="why-title">Full-Service Team</h3><p class="why-desc">Smart contracts, marketing, liquidity — our team handles every technical and promotional aspect so you focus on your product.</p></div>
+      <div class="why-card reveal"><div class="why-hex">04</div><h3 class="why-title">End-to-End Execution</h3><p class="why-desc">From due diligence and documentation to listing day support and post-launch marketing, we see every project through.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="sec-inner">
+    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Team</span></div>
+    <h2 class="sec-title reveal">Meet The <span>Team</span></h2>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-photo-wrap">
+        <div class="team-photo-placeholder"><img src="Generated Image September 12, 2025 - 12_03PM.png" alt="ASAD"></div>
+          <div class="team-ring"></div>
+        </div>
+        <div class="team-name">ASAD</div>
+        <div class="team-role">Founder &amp; CEO</div>
+        <div class="team-socials">
+          <a href="https://t.me/asad_2070" class="team-soc" target="_blank" title="Telegram">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/asadullah-al-mahmud-0011601b7?utm_source=share_via&utm_content=profile&utm_medium=member_android" class="team-soc" target="_blank" title="LinkedIn">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-photo-wrap">
+          <div class="team-photo-placeholder"><img src="gilbert.png" alt="Gilbert"></div>
+          <div class="team-ring"></div>
+        </div>
+        <div class="team-name">Gilbert geper</div>
+        <div class="team-role">Head of listing</div>
+        <div class="team-socials">
+          <a href="https://t.me/Gilbert_web3" class="team-soc" target="_blank" title="Telegram">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+          </a>
+          <a href="#" class="team-soc" target="_blank" title="LinkedIn">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-photo-wrap">
+          <div class="team-photo-placeholder"><img src="imran.jpg" alt="Rakib"></div>
+          <div class="team-ring"></div>
+        </div>
+        <div class="team-name">Mr. Rakib</div>
+        <div class="team-role">Listing Manager</div>
+        <div class="team-socials">
+          <a href="https://t.me/partner_rakib" class="team-soc" target="_blank" title="Telegram">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+          </a>
+          <a href="#" class="team-soc" target="_blank" title="LinkedIn">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-photo-wrap">
+          <div class="team-photo-placeholder"><img src="developer1.png" alt="Gabriele"></div>
+          <div class="team-ring"></div>
+        </div>
+        <div class="team-name">Gabriele</div>
+        <div class="team-role">Developer</div>
+        <div class="team-socials">
+          <a href="#" class="team-soc" target="_blank" title="Telegram">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+          </a>
+          <a href="#" class="team-soc" target="_blank" title="LinkedIn">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sec-inner">
+    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Contact</span></div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <h2 class="sec-title" style="margin-bottom:1rem">Ready to Get <span>Listed?</span></h2>
+        <p class="contact-lead">Reach out today to discuss your project's listing strategy. We respond to all serious inquiries within 24 hours.</p>
+        <div class="contact-panel">
+          <div class="contact-panel-header">Contact Channels</div>
+          <a href="https://t.me/asad_2070" class="c-row" target="_blank">
+            <div class="c-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg></div>
+            <div><div class="c-label">Telegram</div><div class="c-value">@asad_2070</div></div>
+          </a>
+          <a href="mailto:asad@bitmart.com" class="c-row">
+            <div class="c-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></div>
+            <div><div class="c-label">Email</div><div class="c-value">asad@bitmart.com</div></div>
+          </a>
+         
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="contact-form">
+          <div class="f-group"><label class="f-label">Project Name</label><input type="text" class="f-input" placeholder="Your token / project name"></div>
+          <div class="f-group"><label class="f-label">Email Address</label><input type="email" class="f-input" placeholder="your@email.com"></div>
+          <div class="f-group"><label class="f-label">Target Exchanges</label><input type="text" class="f-input" placeholder="e.g. BitMart, Gate.io, MEXC..."></div>
+          <div class="f-group"><label class="f-label">Message</label><textarea class="f-ta" placeholder="Tell us about your project, current stage, and what you need..."></textarea></div>
+          <button class="btn-solid" onclick="alert('Message sent! ListaCare will respond within 24 hours.')">Send Inquiry</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">ListaCare</div>
+    <div class="footer-copy">// 2025 ListaCare — Exchange Listing Agency. All rights reserved.</div>
+    <div class="footer-socials">
+      <a href="https://t.me/asad_2070" class="fsoc" target="_blank"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg></a>
+      <a href="#" class="fsoc"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"/></svg></a>
+      <a href="#" class="fsoc"><svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.261 5.635zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    </div>
+  </div>
+</footer>
+<script>
+// PARTICLE CANVAS
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+resize();
+window.addEventListener('resize',resize);
+
+const pts=[];
+for(let i=0;i<80;i++){
+  pts.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    vx:(Math.random()-0.5)*0.3,
+    vy:(Math.random()-0.5)*0.3,
+    r:Math.random()*1.5+0.5,
+    c:Math.random()>0.6?'0,245,255':'123,47,255'
+  });
+}
+
+function drawFrame(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  pts.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>canvas.width)p.vx*=-1;
+    if(p.y<0||p.y>canvas.height)p.vy*=-1;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${p.c},0.6)`;
+    ctx.fill();
+  });
+  for(let i=0;i<pts.length;i++){
+    for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<120){
+        ctx.beginPath();
+        ctx.moveTo(pts[i].x,pts[i].y);
+        ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle=`rgba(0,245,255,${0.15*(1-dist/120)})`;
+        ctx.lineWidth=0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawFrame);
+}
+drawFrame();
+
+// MOBILE MENU
+function toggleM(){const h=document.getElementById('hbg');const m=document.getElementById('mobMenu');h.classList.toggle('open');m.classList.toggle('open');document.body.style.overflow=m.classList.contains('open')?'hidden':'';}
+function closeM(){document.getElementById('hbg').classList.remove('open');document.getElementById('mobMenu').classList.remove('open');document.body.style.overflow='';}
+
+// SCROLL REVEAL
+const reveals=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*90);obs.unobserve(e.target);}});},{threshold:0.08});
+reveals.forEach(el=>obs.observe(el));
+
+// CLIENTS — duplicate track for seamless infinite scroll
+(function(){
+  const track=document.getElementById('clientsTrack');
+  if(track){
+    const clone=track.innerHTML;
+    track.insertAdjacentHTML('beforeend',clone);
+  }
+})();
+
+// CLIENTS — project detail modal
+(function(){
+  const overlay=document.getElementById('clientModalOverlay');
+  const closeBtn=document.getElementById('clientModalClose');
+  const figure=document.getElementById('clientModalFigure');
+  const tagEl=document.getElementById('clientModalTag');
+  const nameEl=document.getElementById('clientModalName');
+  const descEl=document.getElementById('clientModalDesc');
+  const websiteLink=document.getElementById('clientModalWebsite');
+  const websiteText=document.getElementById('clientModalWebsiteText');
+  const tgLink=document.getElementById('clientModalTg');
+  const tgText=document.getElementById('clientModalTgText');
+
+  function openModalFromItem(item){
+    const name=item.dataset.name||'';
+    const tag=item.dataset.tag||'';
+    const desc=item.dataset.desc||'No project description available yet.';
+    const img=item.dataset.img;
+    const placeholder=item.dataset.placeholder;
+    const website=item.dataset.website||'#';
+    const tg=item.dataset.tg||'#';
+
+    figure.innerHTML='';
+    if(img){
+      const imgEl=document.createElement('img');
+      imgEl.src=img;
+      imgEl.alt=name;
+      figure.appendChild(imgEl);
+    }else if(placeholder){
+      const ph=document.createElement('div');
+      ph.className='client-logo-placeholder';
+      ph.textContent=placeholder;
+      figure.appendChild(ph);
+    }
+
+    tagEl.textContent=tag;
+    nameEl.textContent=name;
+    descEl.textContent=desc;
+
+    websiteLink.href=website;
+    websiteText.textContent=website==='#'?'Coming soon':website.replace(/^https?:\/\//,'');
+    tgLink.href=tg;
+    tgText.textContent=tg==='#'?'Coming soon':tg.replace(/^https?:\/\//,'');
+
+    overlay.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+
+  document.addEventListener('click',(e)=>{
+    const item=e.target.closest('.client-item');
+    if(item) openModalFromItem(item);
+  });
+
+  function closeModal(){
+    overlay.classList.remove('open');
+    document.body.style.overflow='';
+  }
+  closeBtn.addEventListener('click',closeModal);
+  overlay.addEventListener('click',(e)=>{ if(e.target===overlay) closeModal(); });
+  document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeModal(); });
+})();
+
+// CLIENTS — "100+" numeric count-up animation
+(function(){
+  const counter=document.getElementById('clientsCounter');
+  if(!counter) return;
+  const target=parseInt(counter.dataset.target,10)||100;
+  let started=false;
+
+  function animate(){
+    if(started) return;
+    started=true;
+    const duration=1400;
+    const startTime=performance.now();
+    function tick(now){
+      const progress=Math.min((now-startTime)/duration,1);
+      const eased=1-Math.pow(1-progress,3);
+      const current=Math.floor(eased*target);
+      counter.textContent=current+'+';
+      if(progress<1) requestAnimationFrame(tick);
+      else counter.textContent=target+'+';
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const counterObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ animate(); counterObs.unobserve(e.target); } });
+  },{threshold:0.4});
+  counterObs.observe(counter);
+})();
+
+// NAV ACTIVE
+const secs=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-130)c=s.id;});document.querySelectorAll('.nav-links a').forEach(a=>{a.style.color=a.getAttribute('href')==='#'+c?'var(--cyan)':'';});});
+</script>
+</body>
+</html>

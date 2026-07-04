@@ -99,7 +99,18 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(2,4,8,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:0.12em;color:var(--cyan);text-decoration:none;display:flex;align-items:center;gap:0.6rem;text-transform:uppercase}
+.nav-logo{
+    display:flex;
+    align-items:center;
+    text-decoration:none;
+    flex-shrink:0;
+}
+
+.nav-logo img{
+    height:42px;
+    width:auto;
+    display:block;
+}
 .logo-hex{width:22px;height:22px;position:relative;display:flex;align-items:center;justify-content:center}
 .logo-hex svg{animation:hexspin 8s linear infinite}
 @keyframes hexspin{to{transform:rotate(360deg)}}
@@ -421,7 +432,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
         <polygon points="11,5 17,8.5 17,15.5 11,19 5,15.5 5,8.5" stroke="#00f5ff" stroke-width="0.5" fill="none" opacity="0.4"/>
       </svg>
     </span>
-    ListaCare
+    <img src="wordmark.png" alt="Listacare">
   </a>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>

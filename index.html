@@ -8,7 +8,7 @@
 <meta name="description" content="ListaCare is a global crypto exchange listing and token growth agency specializing in CEX & DEX listings, market making, liquidity management, IEO launchpads, and strategic crypto marketing.">
 
 <meta name="robots" content="index, follow">
-
+https://github.com/ASADULLAH-AL-MAHMUD/Listacare/edit/main/index.html
 <link rel="canonical" href="https://listacare.com/">
 
 <meta name="theme-color" content="#020408">
@@ -183,18 +183,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .t-dot{width:5px;height:5px;background:var(--cyan);border-radius:50%;box-shadow:0 0 6px var(--cyan);flex-shrink:0}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
- @media (max-width:1200px){
+ /* Default (Desktop) */
+.mobile-text{
+    display:none;
+}
 
-    .ticker-badge{
-        padding:0.7rem 0.8rem;
-        font-size:0.6rem;
-        letter-spacing:0.08em;
-        gap:0.35rem;
+/* Mobile */
+@media (max-width:768px){
+
+    .desktop-text{
+        display:none;
     }
 
-    .ticker-badge svg{
-        width:10px;
-        height:10px;
+    .mobile-text{
+        display:inline;
     }
 
 }
@@ -664,7 +666,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
   <div class="ticker-inner">
     <div class="ticker-badge">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polygon points="6,0 11,3 11,9 6,12 1,9 1,3" fill="rgba(2,4,8,0.8)" stroke="rgba(2,4,8,0.5)" stroke-width="0.5"/></svg>
-      <span>Live Partners</span>
+      <span class="desktop-text">Live Partners</span>
+      <span class="mobile-text">Live</span>
     </div>
     <div class="ticker-scroll">
       <div class="ticker-track">

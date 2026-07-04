@@ -183,12 +183,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .t-dot{width:5px;height:5px;background:var(--cyan);border-radius:50%;box-shadow:0 0 6px var(--cyan);flex-shrink:0}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-  @media (max-width:480px){
+ @media (max-width:1200px){
 
     .ticker-badge{
-        padding:0.65rem 0.6rem;
-        font-size:0.55rem;
-        letter-spacing:0.05em;
+        padding:0.7rem 0.8rem;
+        font-size:0.6rem;
+        letter-spacing:0.08em;
+        gap:0.35rem;
+    }
+
+    .ticker-badge svg{
+        width:10px;
+        height:10px;
     }
 
 }

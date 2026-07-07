@@ -160,6 +160,30 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .chain-visual{position:relative;width:420px;height:440px}
 .chain-svg{width:100%;height:100%}
 
+/*hero & client num stat*/
+.finish{
+    animation: popGlow .45s ease;
+}
+
+@keyframes popGlow{
+
+    0%{
+        transform:scale(1);
+        text-shadow:none;
+    }
+
+    40%{
+        transform:scale(1.18);
+        text-shadow:0 0 12px rgba(0,245,255,.8);
+    }
+
+    100%{
+        transform:scale(1);
+        text-shadow:0 0 4px rgba(0,245,255,.35);
+    }
+
+}
+
 /* TICKER */
 .ticker-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0;overflow:hidden;position:relative;z-index:1}
 .ticker-inner{display:flex;align-items:stretch}
@@ -482,13 +506,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
         <span class="line2">Care</span>
       </h1>
       
-      <p class="hero-desc">Accelerating crypto projects through strategic exchange listings, market-making, liquidity management, and growth services. Delivering end-to-end execution from launch preparation to global exchange listings.</p>
+      <p class="hero-desc">Helping crypto projects scale globally through strategic exchange listings, market making, liquidity solutions, and launch advisory. From preparation to post-listing growth, we deliver seamless execution every step of the way.</p>
       <div class="hero-btns">
         <a href="#services" class="btn-solid">Explore Services</a>
         <a href="#contact" class="btn-glow">Get Listed Now</a>
       </div>
       <div class="hero-stats">
-        <div class="stat"><div class="stat-n">40+</div><div class="stat-l">Exchanges</div></div>
+        <div class="stat"><div class="stat-n" data-target="40">0+</div><div class="stat-l">Exchanges</div></div>
         <div class="stat"><div class="stat-n">CEX+DEX</div><div class="stat-l">Full Coverage</div></div>
         <div class="stat"><div class="stat-n">IEO</div><div class="stat-l">Launchpad</div></div>
       </div>
@@ -601,8 +625,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
             <rect x="285" y="165" width="90" height="70" rx="4" fill="#0a1520" stroke="#a855f7" stroke-width="1">
               <animate attributeName="stroke-opacity" values="1;0.4;1" dur="3s" repeatCount="indefinite"/>
             </rect>
-            <text x="330" y="195" text-anchor="middle" font-family="Share Tech Mono" font-size="18" fill="#a855f7" letter-spacing="1">CEX+DEX</text>
-            <text x="330" y="215" text-anchor="middle" font-family="Share Tech Mono" font-size="12" fill="#7ab8cc">40+ Partners</text>
+            <text x="330" y="195" text-anchor="middle" font-family="Share Tech Mono" font-size="18" fill="#a855f7" letter-spacing="1">TOKEN</text>
+            <text x="330" y="215" text-anchor="middle" font-family="Share Tech Mono" font-size="12" fill="#7ab8cc">LISTING</text>
             
             <rect x="285" y="165" width="90" height="3" fill="#a855f7" rx="2"/>
           </g>
@@ -625,7 +649,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
             </rect>
             <text x="285" y="302" text-anchor="middle" font-family="Share Tech Mono" font-size="18" fill="#7b2fff" letter-spacing="1">SMART</text>
             <text x="285" y="317" text-anchor="middle" font-family="Share Tech Mono" font-size="16" fill="#7b2fff">CONTRACT</text>
-            <text x="285" y="333" text-anchor="middle" font-family="Share Tech Mono" font-size="12" fill="#3d6475">#CODE</text>
+            <text x="285" y="333" text-anchor="middle" font-family="Share Tech Mono" font-size="12" fill="#3d6475">#DEV #AUDIT</text>
             <rect x="240" y="275" width="90" height="3" fill="#7b2fff" rx="2"/>
           </g>
 
@@ -1168,34 +1192,162 @@ reveals.forEach(el=>obs.observe(el));
   document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeModal(); });
 })();
 
-// CLIENTS — "100+" numeric count-up animation
-(function(){
-  const counter=document.getElementById('clientsCounter');
-  if(!counter) return;
-  const target=parseInt(counter.dataset.target,10)||100;
-  let started=false;
+// CLIENTS Counter Animation (Premium)
 
-  function animate(){
-    if(started) return;
-    started=true;
-    const duration=1400;
-    const startTime=performance.now();
-    function tick(now){
-      const progress=Math.min((now-startTime)/duration,1);
-      const eased=1-Math.pow(1-progress,3);
-      const current=Math.floor(eased*target);
-      counter.textContent=current+'+';
-      if(progress<1) requestAnimationFrame(tick);
-      else counter.textContent=target+'+';
-    }
-    requestAnimationFrame(tick);
-  }
+(function () {
 
-  const counterObs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ animate(); counterObs.unobserve(e.target); } });
-  },{threshold:0.4});
-  counterObs.observe(counter);
+    const counter = document.getElementById("clientsCounter");
+    if (!counter) return;
+
+    let hasAnimated = false;
+
+    const observer = new IntersectionObserver((entries) => {
+
+        entries.forEach(entry => {
+
+            if (entry.isIntersecting && !hasAnimated) {
+
+                hasAnimated = true;
+
+                const target = parseInt(counter.dataset.target);
+                const duration = 1800;
+                const startTime = performance.now();
+
+                counter.textContent = "0+";
+
+                function easeOutCubic(x) {
+                    return 1 - Math.pow(1 - x, 3);
+                }
+
+                function animate(now) {
+
+                    const elapsed = now - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    const eased = easeOutCubic(progress);
+                    const value = Math.floor(eased * target);
+
+                    counter.textContent = value + "+";
+
+                    if (progress < 1) {
+
+                        requestAnimationFrame(animate);
+
+                    } else {
+
+                        counter.textContent = target + "+";
+
+                        // Pop Effect
+                        counter.classList.remove("finish");
+                        void counter.offsetWidth;
+                        counter.classList.add("finish");
+
+                    }
+
+                }
+
+                requestAnimationFrame(animate);
+
+            }
+
+            // Reset when section leaves viewport
+            if (!entry.isIntersecting) {
+
+                hasAnimated = false;
+                counter.textContent = "0+";
+
+            }
+
+        });
+
+    }, {
+
+        threshold: 0.7
+
+    });
+
+    observer.observe(counter);
+
 })();
+
+  // ==============================
+// Premium Hero Counter Animation
+// ==============================
+
+const counters = document.querySelectorAll(".stat-n[data-target]");
+
+counters.forEach(counter => {
+
+    let hasAnimated = false;
+
+    const observer = new IntersectionObserver((entries) => {
+
+        entries.forEach(entry => {
+
+            if (entry.isIntersecting && !hasAnimated) {
+
+                hasAnimated = true;
+
+                const target = parseInt(counter.dataset.target);
+                const duration = 1800;
+                const startTime = performance.now();
+
+                counter.textContent = "0+";
+
+                function easeOutCubic(x) {
+                    return 1 - Math.pow(1 - x, 3);
+                }
+
+                function animate(currentTime) {
+
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    const eased = easeOutCubic(progress);
+                    const value = Math.floor(eased * target);
+
+                    counter.textContent = value + "+";
+
+                    if (progress < 1) {
+
+                        requestAnimationFrame(animate);
+
+                    } else {
+
+                        counter.textContent = target + "+";
+
+                        // Pop Effect
+                        counter.classList.remove("finish");
+                        void counter.offsetWidth;
+                        counter.classList.add("finish");
+
+                    }
+
+                }
+
+                requestAnimationFrame(animate);
+
+            }
+
+            // Reset after leaving hero
+            if (!entry.isIntersecting) {
+
+                hasAnimated = false;
+                counter.textContent = "0+";
+
+            }
+
+        });
+
+    }, {
+
+        threshold: 0.7
+
+    });
+
+    observer.observe(counter);
+
+});
 
 // NAV ACTIVE
 const secs=document.querySelectorAll('section[id]');

@@ -187,9 +187,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 /* TICKER */
 .ticker-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0;overflow:hidden;position:relative;z-index:1}
 .ticker-inner{display:flex;align-items:stretch}
-.ticker-badge{background:linear-gradient(135deg,var(--cyan),var(--cyan2));color:var(--bg);font-family:'Share Tech Mono',monospace;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.9rem 1.5rem;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:0.5rem;font-weight:600}
-.ticker-badge::after{content:'';width:6px;height:6px;background:var(--bg);border-radius:50%;animation:blink 1s step-end infinite}
-@keyframes blink{50%{opacity:0}}
 .ticker-scroll{overflow:hidden;flex:1;display:flex;align-items:center}
 .ticker-track{display:flex;animation:ticker 25s linear infinite;width:max-content;padding:0.85rem 0}
 .t-item{display:flex;align-items:center;gap:0.5rem;padding:0 2rem;white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:0.9rem;letter-spacing:0.08em;color:var(--text2);border-right:1px solid var(--border)}
@@ -206,27 +203,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 }
 .t-dot{width:5px;height:5px;background:var(--cyan);border-radius:50%;box-shadow:0 0 6px var(--cyan);flex-shrink:0}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-  .mobile-text{
-    display:none;
-}
-
-@media (max-width:768px){
-
-    .ticker-badge{
-        display:none !important;
-    }
-
-    .ticker-scroll{
-        width:100% !important;
-        flex:1;
-    }
-
-    .ticker-inner{
-        display:block !important;
-    }
-
-}
 
 /* SECTIONS */
 section{padding:6rem 3rem;position:relative;z-index:1}

@@ -248,6 +248,51 @@ section{padding:6rem 3rem;position:relative;z-index:1}
 .skill-chip{font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;color:var(--text2);border:1px solid var(--border);padding:0.35rem 0.8rem;transition:all 0.2s;cursor:default;background:var(--bg)}
 .skill-chip:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
 
+  /* =========================================
+   Exchange Network - Continuous Scanner
+========================================= */
+
+.exchange-list{
+    position:relative;
+    overflow:hidden;
+}
+
+.exchange-list::after{
+    content:'';
+    position:absolute;
+    left:0;
+    width:100%;
+    height:42px;
+    pointer-events:none;
+    z-index:5;
+
+    background:linear-gradient(
+        180deg,
+        rgba(0,245,255,0),
+        rgba(0,245,255,.12),
+        rgba(0,245,255,.20),
+        rgba(0,245,255,.12),
+        rgba(0,245,255,0)
+    );
+
+    box-shadow:
+        0 0 18px rgba(0,245,255,.18);
+
+    animation:networkScanner 8s linear infinite;
+}
+
+@keyframes networkScanner{
+
+    0%{
+        transform:translateY(-60px);
+    }
+
+    100%{
+        transform:translateY(calc(100% + 60px));
+    }
+
+}
+
 
 /* CLIENTS */
 #clients{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}

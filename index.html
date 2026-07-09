@@ -207,8 +207,66 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 /* SECTIONS */
 section{padding:6rem 3rem;position:relative;z-index:1}
 .sec-inner{max-width:1200px;margin:0 auto}
-.sec-tag{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
-.sec-tag-line{width:30px;height:1px;background:var(--cyan)}
+/* SECTION TAG */
+
+.sec-tag{
+
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+
+    margin-bottom:18px;
+
+}
+
+.sec-tag-hex{
+
+    width:12px;
+    height:12px;
+
+    background:var(--cyan);
+
+    clip-path:polygon(
+        25% 0%,
+        75% 0%,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0% 50%
+    );
+
+    box-shadow:
+        0 0 8px rgba(0,245,255,.45);
+
+}
+.sec-tag-hex{
+
+    animation:hexPulse 3s ease infinite;
+
+}
+
+@keyframes hexPulse{
+
+    0%,100%{
+
+        transform:scale(1);
+
+        opacity:.7;
+
+    }
+
+    50%{
+
+        transform:scale(1.15);
+
+        opacity:1;
+
+        box-shadow:
+        0 0 14px rgba(0,245,255,.7);
+
+    }
+
+}
 .sec-tag-txt{font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;color:var(--cyan);text-transform:uppercase}
 .sec-title{font-family:'Rajdhani',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text);line-height:1.1;margin-bottom:3rem}
 .sec-title span{background:linear-gradient(90deg,var(--cyan),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -756,7 +814,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
 <!-- SERVICES -->
 <section id="services">
   <div class="sec-inner">
-    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Services</span></div>
+    <div class="sec-tag reveal"><span class="sec-tag-hex"></span><span class="sec-tag-txt">Services</span></div>
     <h2 class="sec-title reveal">Everything Your <span>Listing Needs</span></h2>
     <div class="svc-grid reveal">
       <div class="svc-card">
@@ -808,7 +866,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
 <!-- ABOUT -->
 <section id="about">
   <div class="sec-inner">
-    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">About</span></div>
+    <div class="sec-tag reveal"><span class="sec-tag-hex"></span><span class="sec-tag-txt">About</span></div>
     <div class="about-grid">
       <div class="reveal">
         <h2 class="sec-title" style="margin-bottom:1.5rem">Bridging Projects to <span>Global Markets</span></h2>
@@ -842,7 +900,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
 <!-- CLIENTS -->
 <section id="clients">
   <div class="sec-inner">
-    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Clients</span></div>
+    <div class="sec-tag reveal"><span class="sec-tag-hex"></span><span class="sec-tag-txt">Clients</span></div>
     <h2 class="sec-title reveal">Projects We've <span>Launched</span></h2>
 
     <div class="clients-count-row reveal">
@@ -930,7 +988,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
 <!-- PROCESS -->
 <section id="process">
   <div class="sec-inner">
-    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Process</span></div>
+    <div class="sec-tag reveal"><span class="sec-tag-hex"></span><span class="sec-tag-txt">Process</span></div>
     <h2 class="sec-title reveal">The Listing <span>Pipeline</span></h2>
     <div class="process-chain reveal">
       <div class="proc-step"><div class="proc-num">01</div><h3 class="proc-title">Consultation</h3><p class="proc-desc">Initial discussion to understand your project, tokenomics, and target exchanges.</p></div>
@@ -945,7 +1003,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
 <!-- WHY -->
 <section id="why">
   <div class="sec-inner">
-    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Advantages</span></div>
+    <div class="sec-tag reveal"><span class="sec-tag-hex"></span><span class="sec-tag-txt">Advantages</span></div>
     <h2 class="sec-title reveal">Why Choose <span>ListaCare</span></h2>
     <div class="why-grid">
       <div class="why-card reveal"><div class="why-hex">01</div><h3 class="why-title">Direct Insider Access</h3><p class="why-desc">Direct exchange access with faster communication, transparent pricing, and no unnecessary intermediaries.</p></div>
@@ -959,7 +1017,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
 <!-- TEAM -->
 <section id="team">
   <div class="sec-inner">
-    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Team</span></div>
+    <div class="sec-tag reveal"><span class="sec-tag-hex"></span><span class="sec-tag-txt">Team</span></div>
     <h2 class="sec-title reveal">Meet The <span>Team</span></h2>
     <div class="team-grid">
       <div class="team-card reveal">
@@ -1037,7 +1095,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:1.75rem 
 <!-- CONTACT -->
 <section id="contact">
   <div class="sec-inner">
-    <div class="sec-tag reveal"><span class="sec-tag-line"></span><span class="sec-tag-txt">Contact</span></div>
+    <div class="sec-tag reveal"><span class="sec-tag-hex"></span><span class="sec-tag-txt">Contact</span></div>
     <div class="contact-grid">
       <div class="reveal">
         <h2 class="sec-title" style="margin-bottom:1rem">Ready to Get <span>Listed?</span></h2>
